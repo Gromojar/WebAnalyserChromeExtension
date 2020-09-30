@@ -1,0 +1,21 @@
+{ "manifest_version": 2, 
+  "name": "Website Analyser", 
+  "version": "0.1.0", 
+  "content_security_policy":"script-src 'self' https://apis.google.com; object-src 'self'",
+  "permissions": ["<all_urls>","tabs","webNavigation"], 
+  "browser_action": 
+   { "default_popup": "index.html" },
+   "background": {
+    "scripts": ["scr.js"]
+  },
+  "content_scripts": [
+        {
+          "matches": [
+            "<all_urls>"
+          ],
+		  "run_at": "document_start",
+          "js": ["scr.js"]
+        }
+      ]
+   
+}
