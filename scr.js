@@ -8,7 +8,6 @@ chrome.tabs.getSelected(null,function(tab) {
     var tablink = tab.url;
 	document.getElementById("site").value = tablink;
 	Skanuj();
-	updateIcon();
 });
 window.onload = function() {
 	Skanuj();
@@ -24,21 +23,7 @@ var adt;
 
 
 
-function updateIcon() {
 
-	if(icon == 1)
-	{
-chrome.browserAction.setIcon({path:"red.png"});
-	}
-	if(icon == 2)
-	{
-chrome.browserAction.setIcon({path:"green.png"});
-	}
-		if(icon == 3)
-	{
-chrome.browserAction.setIcon({path:"blue.png"});
-	}
-};
 function Skanuj()
 {
 var mydata;
@@ -110,33 +95,38 @@ if(mydata.bsc.dlm == undefined && mydata.bsc.adt == undefined)
 {
 document.getElementById("result").innerHTML += "NO DATA!"
 chrome.browserAction.setIcon({path:"blue.png"});
+chrome.browserAction.setBadgeText({text: 'IDK'});
 icon = 3;
 }
-if(mydata.bsc.adt <= 750)
+
+if(mydata.bsc.adt > 750)
 {
-document.getElementById("result").innerHTML += "Adult score =" + mydata.bsc.adt + " - PORN WEBSITE!"
+document.getElementById("result").innerHTML += "Adult score =" + mydata.bsc.adt + " - OK!   "
+chrome.browserAction.setIcon({path:"green.png"});
+icon = 2;
+chrome.browserAction.setBadgeText({text: 'OK'});
+}
+if(mydata.bsc.dlm >= 1000)
+{
+document.getElementById("result").innerHTML += "Piracy score =" + mydata.bsc.dlm + " - OK!   "
+chrome.browserAction.setIcon({path:"green.png"});
+chrome.browserAction.setBadgeText({text: 'OK'});
+icon = 2;
+}
+if(mydata.bsc.dlm < 999)
+{
+document.getElementById("result").innerHTML += "Piracy score =" + mydata.bsc.dlm + " - PIRACY!   "
 chrome.browserAction.setIcon({path:"red.png"});
 icon = 1;
 chrome.browserAction.setBadgeText({text: 'NOPE'});
 }
-if(mydata.bsc.adt > 750)
+if(mydata.bsc.adt < 750)
 {
-document.getElementById("result").innerHTML += "Adult score =" + mydata.bsc.adt + " - OK!"
-chrome.browserAction.setIcon({path:"green.png"});
-icon = 2;
-}
-document.getElementById("result").innerHTML += "<br><br>";
-if(mydata.bsc.dlm < 1000)
-{
-document.getElementById("result").innerHTML += "Piracy score =" + mydata.bsc.dlm + " - PIRACY!"
+document.getElementById("result").innerHTML += "Adult score =" + mydata.bsc.adt + " - PORN WEBSITE!   "
 chrome.browserAction.setIcon({path:"red.png"});
 icon = 1;
+chrome.browserAction.setBadgeText({text: 'NOPE'});
 }
-if(mydata.bsc.dlm >= 1000)
-{
-document.getElementById("result").innerHTML += "Piracy score =" + mydata.bsc.dlm + " - OK!"
-chrome.browserAction.setIcon({path:"green.png"});
-icon = 2;
-}
+
 
 }
