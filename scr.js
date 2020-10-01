@@ -4,15 +4,24 @@ document.addEventListener('DOMContentLoaded', function() {
     Skanuj();
   });
 });
+document.addEventListener('DOMContentLoaded', function() {
+ 
+    Skanuj();
+  });
 chrome.tabs.getSelected(null,function(tab) {
     var tablink = tab.url;
 	document.getElementById("site").value = tablink;
 	Skanuj();
 });
-window.onload = function() {
+chrome.tabs.getSelected(null, function(tab){
+    console.log(tab.url);
+});
+/*window.onload = function() {
+	    var tablink = tab.url;
+	document.getElementById("site").value = tablink;
 	Skanuj();
 }
-
+*/
 var icon;
 var request = new XMLHttpRequest();
 var request2 = new XMLHttpRequest();
@@ -21,7 +30,15 @@ var mydata2;
 var adt;
 
 
-
+//chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
+//  if (changeInfo.status == 'complete') {
+//
+//		    var tablink = tab.url;
+//	document.getElementById("site").value = tablink;
+//    Skanuj();
+//
+//  }
+//})
 
 
 function Skanuj()
