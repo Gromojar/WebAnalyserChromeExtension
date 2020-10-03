@@ -1,12 +1,16 @@
-{ "manifest_version": 2, 
-  "name": "Website Analyser", 
-  "version": "0.1.0", 
+{
+  "name": "Website Analyser",
+  "description": "Checks if website contains piracy or adult content.",
+  "version": "0.3",
   "content_security_policy":"script-src 'self' https://apis.google.com; object-src 'self'",
   "permissions": ["<all_urls>","tabs","webNavigation"], 
-  "browser_action": 
-   { "default_popup": "index.html"},
-   "background": {
-    "scripts": ["scr.js"]
-  }
-   
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_action": {
+      "default_name": "Page Language",
+	  "default_title": "Checks if website contains piracy or adult content. Dev by Damian Chymkowski. Enjoy!",
+	  "default_popup": "index.html"
+  },
+  "manifest_version": 2
 }

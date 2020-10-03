@@ -1,60 +1,85 @@
-document.addEventListener('DOMContentLoaded', function() {
-  var btn = document.getElementById('mybtn');
-  btn.addEventListener('click', function() {
-    Skanuj();
-  });
-});
-chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
-  if (changeInfo.status == 'complete') {
+// Copyright (c) 2009 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
-    Skanuj();
-    chrome.browserAction.setBadgeText({text: 'LOL'});
-  }
-})
-document.addEventListener('DOMContentLoaded', function() {
- 
-    Skanuj();
-  });
-chrome.tabs.getSelected(null,function(tab) {
-    var tablink = tab.url;
-	document.getElementById("site").value = tablink;
-	Skanuj();
-});
-chrome.tabs.getSelected(null, function(tab){
-    console.log(tab.url);
-});
-/*window.onload = function() {
-	    var tablink = tab.url;
-	document.getElementById("site").value = tablink;
-	Skanuj();
-}
-*/
 var icon;
 var request = new XMLHttpRequest();
 var request2 = new XMLHttpRequest();
 var mydata;
 var mydata2;
 var adt;
+var tablink;
 
+chrome.browserAction.setBadgeBackgroundColor({color: [155,155,155,255]});
+
+//chrome.tabs.onUpdated.addListener(function(tabId, props) {
+ // if (props.status == "complete" && tabId == selectedId)
+//
+//
+//});
+
+//chrome.tabs.onSelectionChanged.addListener(function(tabId, props) {
+//  selectedId = tabId;
+//
+//
+//});
+
+//chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+//  selectedId = tabs[0].id;
+//
+//
+//});
+
+
+/*window.onload = function() {
+	    var tablink = tab.url;
+	document.getElementById("site").value = tablink;
+	Skanuj();
+}
+*/
 
 //chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
 //  if (changeInfo.status == 'complete') {
 //
-//		    var tablink = tab.url;
-//	document.getElementById("site").value = tablink;
 //    Skanuj();
-//
+//    
 //  }
 //})
+//document.addEventListener('DOMContentLoaded', function() {
+ //
+   // Skanuj();
+  //});
+/*window.onload = function() {
+	    var tablink = tab.url;
+	document.getElementById("site").value = tablink;
+	Skanuj();
+}
+*/
 
+chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
+  if (changeInfo.status == 'complete') {
+
+    Check();
+
+  }
+})
+function Check()
+{
+chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+    tablink = tabs[0].url;
+    // use `url` here inside the callback because it's asynchronous!
+	Skanuj();
+});
+}
 
 function Skanuj()
 {
+	
 var mydata;
 var adt;
 var arr;
 var frame;
-var text = "https://api.adsafeprotected.com/db2/client/28824/itgrl.json?adsafe_url=" + document.getElementById("site").value;
+var text = "https://api.adsafeprotected.com/db2/client/28824/itgrl.json?adsafe_url=" + tablink;
 //var text2 = "https://staging.redvolcano.uk/api/verifyDomains.php?apikey=qxeGKnA4YgoOxwB9xEbaqWgJ54gRqQFgtGyqai1F&body=[%22google.com%22]";
 
 
@@ -73,7 +98,7 @@ var mydata = JSON.parse(request.response);
 console.log(mydata.bsc.adt);
 if(mydata.bsc.adt <= 750 || mydata.bsc.dlm < 1000)
 {
-document.getElementById("result").className = "p-3 mb-2 bg-danger text-white";
+
 }
 /*if(mydata.bsc.adt == undefined)
 {
@@ -86,11 +111,10 @@ document.getElementById("result").className = "p-3 mb-2 bg-info text-white";
 */
 if(mydata.bsc.adt >= 750 && mydata.bsc.dlm >= 1000)
 {
-document.getElementById("result").className = "p-3 mb-2 bg-success text-white";
 }
 if(mydata.bsc.adt == undefined && mydata.bsc.dlm == undefined)
 {
-document.getElementById("result").className = "p-3 mb-2 bg-info text-white";
+
 }
 /* if(mydata.bsc.adt == undefined)
 {
@@ -113,11 +137,9 @@ document.getElementById("result").innerHTML = "NO DATA";
 document.getElementById("result").className = "p-3 mb-2 bg-info text-white";
 }
 */
-document.getElementById("result").innerHTML = "SITE INFO";
-document.getElementById("result").innerHTML += "<br><br>";
 if(mydata.bsc.dlm == undefined && mydata.bsc.adt == undefined)
 {
-document.getElementById("result").innerHTML += "NO DATA!"
+
 chrome.browserAction.setIcon({path:"blue.png"});
 chrome.browserAction.setBadgeText({text: ' IDK '});
 icon = 3;
@@ -125,32 +147,29 @@ icon = 3;
 
 if(mydata.bsc.adt > 750)
 {
-document.getElementById("result").innerHTML += "Adult score =" + mydata.bsc.adt + " - OK!   "
 chrome.browserAction.setIcon({path:"green.png"});
 icon = 2;
 chrome.browserAction.setBadgeText({text: '  OK  '});
 }
 if(mydata.bsc.dlm >= 1000)
 {
-document.getElementById("result").innerHTML += "Piracy score =" + mydata.bsc.dlm + " - OK!   "
+
 chrome.browserAction.setIcon({path:"green.png"});
 chrome.browserAction.setBadgeText({text: '  OK  '});
 icon = 2;
 }
 if(mydata.bsc.dlm < 999)
 {
-document.getElementById("result").innerHTML += "Piracy score =" + mydata.bsc.dlm + " - PIRACY!   "
+
 chrome.browserAction.setIcon({path:"red.png"});
 icon = 1;
 chrome.browserAction.setBadgeText({text: 'NOPE'});
 }
 if(mydata.bsc.adt < 750)
 {
-document.getElementById("result").innerHTML += "Adult score =" + mydata.bsc.adt + " - PORN WEBSITE!   "
+
 chrome.browserAction.setIcon({path:"red.png"});
 icon = 1;
 chrome.browserAction.setBadgeText({text: 'NOPE'});
 }
-
-
 }
